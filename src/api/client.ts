@@ -3,6 +3,10 @@ import type { TokenPair } from './types'
 
 const REFRESH_KEY = 'fittrack:refresh'
 
+export const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
+).replace(/\/+$/, '')
+
 let accessToken: string | null = null
 let refreshPromise: Promise<string> | null = null
 
@@ -21,7 +25,7 @@ export function hasRefreshToken() {
 }
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
 })
 
@@ -38,7 +42,7 @@ async function refreshAccessToken(): Promise<string> {
 
   // axios "puro" pra não cair no interceptor de novo
   const { data } = await axios.post<{ access: string; refresh?: string }>(
-    `${import.meta.env.VITE_API_URL}/auth/token/refresh/`,
+    `${API_BASE_URL}/auth/token/refresh/`,
     { refresh },
   )
 

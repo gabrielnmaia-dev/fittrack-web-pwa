@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apresentação — FitTrack PWA (Treino & Dieta)</title>
+  <meta name="description" content="Slides da apresentação do PWA FitTrack: treinos, dietas e recursos PWA." />
+  <style>
+    :root {
+      --bg-dark: #080b09;
+      --bg-light: #f4f6f0;
+      --ink-dark: #e8edeb;
+      --ink-light: #111817;
+      --accent: #22c55e;
+      --accent-orange: #fb923c;
+      --accent-blue: #3b82f6;
+      --accent-violet: #a855f7;
+      --muted: #6b7280;
+      --border: rgba(255,255,255,0.12);
+      --radius: 14px;
+      --shadow: 0 20px 40px -10px rgba(0,0,0,0.35);
+      --transition: 0.25s ease;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-dark);
+      color: var(--ink-dark);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    body.light { background: var(--bg-light); color: var(--ink-light); }
+    body.light .slide { border-color: rgba(0,0,0,0.08); box-shadow: var(--shadow); }
+    body.light .card { background: #ffffff; border-color: rgba(0,0,0,0.06); color: var(--ink-light); }
+    body.light .muted { color: #4b5563; }
+
+    /* Apresentação */
+    #deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      perspective: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px;
+      gap: 32px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-dark);
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), opacity var(--transition), filter var(--transition);
+      will-change: transform, opacity, filter;
+      overflow: hidden;
+      text-align: center;
+    }
+    .slide.current { z-index: 20; transform: scale(1); opacity: 1; filter: none; pointer-events: auto; }
+    .slide.prev { z-index: 10; transform: translateX(-100%) scale(0.92); opacity: 0.5; filter: blur(6px); pointer-events: none; }
+    .slide.next { z-index: 10; transform: translateX(100%) scale(0.92); opacity: 0.5; filter: blur(6px); pointer-events: none; }
+
+    .eyebrow {
+      font-size: 0.85rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin: 0;
+    }
+    h1, h2, h3 { margin: 0; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; }
+    h1 { font-size: 2.6rem; }
+    h2 { font-size: 1.9rem; }
+    h3 { font-size: 1.35rem; }
+    p.lead { margin: 0; font-size: 1.15rem; line-height: 1.6; color: #c9d2ce; max-width: 720px; }
+    body.light p.lead { color: #374151; }
+    .muted { color: var(--muted); font-size: 0.9rem; margin: 0; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      color: var(--ink-dark);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 0 6px 12px 6px;
+    }
+    body.light .badge { background: #e5e7eb; color: var(--ink-light); border-color: rgba(0,0,0,0.08); }
+
+    /* Grid de cards */
+    .grid { display: grid; gap: 16px; width: 100%; max-width: 960px; }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .card {
+      position: relative;
+      padding: 24px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      text-align: left;
+      transition: transform var(--transition), border-color var(--transition);
+      overflow: hidden;
+    }
+    .card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.25); }
+    body.light .card { background: #ffffff; border-color: rgba(0,0,0,0.06); }
+    .card:hover { border-color: rgba(0,0,0,0.12); }
+    .card .kicker { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 8px; font-weight: 700; }
+    body.light .card .kicker { color: #6b7280; }
+    .card h4 { font-size: 1.1rem; margin: 0 0 8px 0; }
+    .card p { font-size: 0.92rem; color: #c9d2ce; line-height: 1.55; margin: 0; }
+    body.light .card p { color: #4b5563; }
+
+    .icon-wrap {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: grid; place-items: center;
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.25);
+      color: var(--accent);
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+    }
+    .card.orange .icon-wrap { background: rgba(251,146,60,0.12); border-color: rgba(251,146,60,0.25); color: var(--accent-orange); }
+    .card.blue .icon-wrap { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.25); color: var(--accent-blue); }
+    .card.violet .icon-wrap { background: rgba(168,85,247,0.12); border-color: rgba(168,85,247,0.25); color: var(--accent-violet); }
+
+    /* Controles */
+    #controls {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 14px;
+      z-index: 100;
+    }
+    .btn-nav {
+      width: 44px; height: 44px; border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.08);
+      color: var(--ink-dark);
+      cursor: pointer; font-size: 1.1rem; display: grid; place-items: center;
+      transition: all var(--transition);
+    }
+    body.light .btn-nav { background: #ffffff; border-color: rgba(0,0,0,0.08); color: var(--ink-light); }
+    .btn-nav:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
+    body.light .btn-nav:hover { background: #f3f4f6; }
+    .btn-nav:active { transform: scale(0.94); }
+    .btn-nav svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .progress {
+      position: fixed; top: 0; left: 0; height: 4px; background: rgba(255,255,255,0.08);
+      width: 100%; z-index: 99; transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    body.light .progress { background: rgba(0,0,0,0.06); }
+
+    #counter {
+      position: fixed; top: 16px; right: 20px;
+      font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); font-weight: 700; z-index: 100;
+      padding: 6px 10px; border-radius: 8px;
+      background: rgba(0,0,0,0.35); border: 1px solid var(--border);
+    }
+    body.light #counter { background: rgba(0,0,0,0.08); color: #6b7280; border-color: rgba(0,0,0,0.08); }
+
+    .theme-toggle {
+      position: fixed; top: 16px; left: 20px; width: 36px; height: 36px;
+      border-radius: 10px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.08); color: var(--ink-dark);
+      cursor: pointer; z-index: 100; font-size: 1rem; display: grid; place-items: center;
+      transition: all var(--transition);
+    }
+    body.light .theme-toggle { background: #ffffff; border-color: rgba(0,0,0,0.08); color: var(--ink-light); }
+    .theme-toggle:hover { background: rgba(255,255,255,0.18); }
+
+    .help {
+      position: fixed; bottom: 24px; right: 24px;
+      font-size: 0.72rem; color: var(--muted); text-align: right;
+      line-height: 1.4; max-width: 200px;
+    }
+    body.light .help { color: #6b7280; }
+    .help kbd { border: 1px solid var(--border); border-radius: 4px; padding: 0 4px; font-size: 0.7rem; }
+
+    /* Tela cheia */
+    .full { inset: 0; position: absolute; margin: 0; border-radius: 0; border: none; box-shadow: none; padding: 40px; }
+    .screenshot {
+      width: 100%; max-width: 760px; border-radius: 18px; border: 1px solid var(--border);
+      background: #000; overflow: hidden; box-shadow: var(--shadow);
+    }
+    .screenshot img { width: 100%; height: auto; display: block; }
+
+    .two-col {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+      text-align: left; width: 100%; max-width: 980px;
+    }
+    @media (max-width: 720px) {
+      .two-col { grid-template-columns: 1fr; }
+      h1 { font-size: 1.9rem; }
+      h2 { font-size: 1.5rem; }
+      .slide { padding: 32px 16px; }
+    }
+
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
+    .chip { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06); color: var(--ink-dark); font-size: 0.85rem; font-weight: 600; }
+    body.light .chip { background: #e5e7eb; border-color: rgba(0,0,0,0.08); color: var(--ink-light); }
+
+    .cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 24px; border-radius: 12px; border: 1px solid var(--accent);
+      background: var(--accent); color: #000; font-weight: 700; text-decoration: none;
+      font-size: 1rem; transition: transform var(--transition), opacity var(--transition);
+    }
+    .cta:hover { transform: translateY(-2px); opacity: 0.95; }
+    .cta-ghost {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 24px; border-radius: 12px; border: 1px solid var(--border);
+      background: transparent; color: var(--ink-dark); font-weight: 600; text-decoration: none;
+      font-size: 1rem; transition: transform var(--transition);
+    }
+    body.light .cta-ghost { color: var(--ink-light); border-color: rgba(0,0,0,0.12); }
+    .cta-ghost:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+    .footer-note { margin-top: auto; font-size: 0.8rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <div class="theme-toggle" id="themeToggle" title="Alternar tema (T)">🌙/☀️</div>
+  <div id="counter">1 / 9</div>
+  <div class="progress" id="progress"></div>
+
+  <div id="deck">
+    <!-- Slide 1: Título -->
+    <section class="slide current" id="s1">
+      <div class="badge">FitTrack · PWA</div>
+      <h1>FitTrack</h1>
+      <p class="lead">Treino e dieta na palma da mão. Um aplicativo instalável, que funciona offline e cabe no seu navegador.</p>
+      <div class="chip-row">
+        <span class="chip">React 19 + Vite</span>
+        <span class="chip">TypeScript</span>
+        <span class="chip">vite-plugin-pwa</span>
+        <span class="chip">React Router</span>
+      </div>
+      <div class="footer-note">Apresentação para PWA de treinos e dieta · pt-BR</div>
+    </section>
+
+    <!-- Slide 2: O que é -->
+    <section class="slide" id="s2">
+      <div class="eyebrow">Visão geral</div>
+      <h2>O que é o FitTrack?</h2>
+      <p class="lead">Uma PWA (Progressive Web App) para organizar treinos, exercícios e dietas em um só lugar, com instalação direta na tela inicial e funcionamento offline.</p>
+      <div class="grid grid-3">
+        <article class="card">
+          <div class="icon-wrap">🏋️</div>
+          <div class="kicker">Treinos</div>
+          <h4>Planos de treino</h4>
+          <p>Crie planos com exercícios, séries, repetições, cargas e duração. Filtros por nível e busca rápida.</p>
+        </article>
+        <article class="card orange">
+          <div class="icon-wrap">🥗</div>
+          <div class="kicker">Dietas</div>
+          <h4>Planos alimentares</h4>
+          <p>Defina meta diária de calorias e organize refeições com acompanhamento de progresso em porcentagem.</p>
+        </article>
+        <article class="card blue">
+          <div class="icon-wrap">📱</div>
+          <div class="kicker">PWA</div>
+          <h4>Instalável e offline</div>
+          <p>Instale no celular ou desktop, use sem internet com dados em cache e receba atualizações automáticas.</p>
+        </article>
+      </div>
+      <div class="footer-nite" style="display:none"></div>
+      <div class="footer-note">Dashboard com IMC, peso, altura, calorias da dieta atual e treinos recentes.</div>
+    </section>
+
+    <!-- Slide 3: Stack -->
+    <section class="slide" id="s3">
+      <div class="eyebrow">Tecnologia</div>
+      <h2>Stack do projeto</h2>
+      <div class="grid grid-3">
+        <article class="card">
+          <div class="icon-wrap">⚛️</div>
+          <div class="kicker">Frontend</div>
+          <h4>React 19 + Vite</h4>
+          <p>Build rápido, HMR e React Compiler desabilitado por desempenho.</p>
+        </article>
+        <article class="card orange">
+          <div class="icon-wrap">📘</div>
+          <div class="kicker">Linguagem</div>
+          <h4>TypeScript</h4>
+          <p>Tipagem estática em rotas, tipos de API e componentes.</p>
+        </article>
+        <article class="card blue">
+          <div class="icon-wrap">🧭</div>
+          <div class="kicker">Navegação</div>
+          <h4>React Router v7</h4>
+          <p>Rotas protegidas, formulários de treino/dieta e navegação entre telas.</p>
+        </article>
+        <article class="card violet">
+          <div class="icon-wrap">📦</div>
+          <div class="kicker">PWA</div>
+          <h4>vite-plugin-pwa</h4>
+          <p>Service Worker, manifest web app, ícones e atualização automática (autoUpdate).</p>
+        </article>
+        <article class="card">
+          <div class="icon-wrap">🎨</div>
+          <div class="kicker">Estilo</div>
+          <h4>CSS puro + Vite</h4>
+          <p>Variáveis de tema (claro/escuro/sistema), design responsivo e acessível.</p>
+        </article>
+        <article class="card orange">
+          <div class="icon-wrap">🔐</div>
+          <div class="kicker">Auth</div>
+          <h4>Contexto de autenticação</div>
+          <p>Login, cadastro, rotas protegidas e perfil de usuário.</p>
+        </article>
+      </div>
+      <div class="footer-note">Manifest: standalone, portrait-primary, ícones 192 e 512 px, maskable.</div>
+    </section>
+
+    <!-- Slide 4: Telas principais -->
+    <section class="slide" id="s4">
+      <div class="eyebrow">Navegação</div>
+      <h2>Telas principais</h2>
+      <div class="two-col">
+        <div>
+          <div class="grid grid-2">
+            <article class="card">
+              <div class="kicker">Início</div>
+              <h4>Dashboard</h4>
+              <p>Saudação, IMC, peso, altura, calorias da dieta atual, treinos recentes e dieta em foco com anel de progresso.</p>
+            </article>
+            <article class="card orange">
+              <div class="kicker">Treinos</div>
+              <h4>Workouts</h4>
+              <p>Lista de planos com busca, filtro por nível, ordenação, paginação e cards com duração e exercícios.</p>
+            </article>
+            <article class="card blue">
+              <div class="kicker">Dietas</div>
+              <h4>Nutrição</h4>
+              <p>Crie dietas, defina meta de calorias, adicione refeições, edite e exclua com barra de progresso de kcal.</p>
+            </article>
+            <article class="card violet">
+              <div class="kicker">Perfil</div>
+              <h4>Usuário</h4>
+              <p>Dados do objetivo, alteração de tema e logout. Administradores veem lista de usuários.</p>
+            </article>
+          </div>
+        </div>
+        <div class="screenshot" style="display:flex;align-items:center;justify-content:center;min-height:320px;color:#9ca3af;font-size:0.9rem;">
+          Prévia das telas (insira capturas do app aqui)
+        </div>
+      </div>
+      <div class="footer-note">Bottom-nav em mobile, sidebar em desktop, banner de modo offline e botão de instalação PWA.</div>
+    </section>
+
+    <!-- Slide 5: Recursos PWA -->
+    <section class="slide" id="s5">
+      <div class="eyebrow">Progressive Web App</div>
+      <h2>Por que PWA?</h2>
+      <div class="grid grid-3">
+        <article class="card">
+          <div class="icon-wrap">⬇️</div>
+          <div class="kicker">Instalação</div>
+          <h4>Tela inicial</h4>
+          <p>Prompt de instalação via beforeinstallprompt, atalho no sidebar e no header mobile.</p>
+        </article>
+        <article class="card orange">
+          <div class="icon-wrap">📴</div>
+          <div class="kicker">Offline</div>
+          <h4>Funciona sem internet</h4>
+          <p>Service Worker com cache de assets e dados; banner avisa quando está offline.</p>
+        </article>
+        <article class="card blue">
+          <div class="icon-wrap">🔄</div>
+          <div class="kicker">Atualizações</div>
+          <h4>autoUpdate</div>
+          <p>Service Worker se atualiza sozinho e recarrega o app com a versão mais recente.</p>
+        </article>
+        <article class="card violet">
+          <div class="icon-wrap">🎨</div>
+          <div class="kicker">Aparência</div>
+          <h4>Standalone</h4>
+          <p>Modo standalone, ícones 192/512 px, mascarável, theme-color e splash nativo.</p>
+        </article>
+      </div>
+      <div class="footer-note">Tema claro, escuro e sistema, persistido em localStorage e sincronizado com prefers-color-scheme.</div>
+    </section>
+
+    <!-- Slide 6: Como usar -->
+    <section class="slide" id="s6">
+      <div class="eyebrow">Primeiros passos</div>
+      <h2>Como usar o FitTrack</h2>
+      <div class="grid grid-3">
+        <article class="card" style="counter-reset: step;">
+          <div style="font-size:2rem;font-weight:800;color:var(--accent);">01</div>
+          <h4>Acesse</h4>
+          <p>Abra o endereço do FitTrack no navegador (Chrome, Edge, Safari).</p>
+        </article>
+        <article class="card orange">
+          <div style="font-size:2rem;font-weight:800;color:var(--accent-orange);">02</div>
+          <h4>Cadastre</h4>
+          <p>Crie sua conta, defina objetivo, peso e altura no perfil.</p>
+        </article>
+        <article class="card blue">
+          <div style="font-size:2rem;font-weight:800;color:var(--accent-blue);">03</div>
+          <h4>Instale</h4>
+          <p>Toque em "Instalar aplicativo" no sidebar para adicionar à tela inicial.</p>
+        </article>
+        <article class="card violet">
+          <div style="font-size:2rem;font-weight:800;color:var(--accent-violet);">04</div>
+          <h4>Treine</h4>
+          <p>Cadastre exercícios, crie seu primeiro treino e monte sua dieta com refeições.</p>
+        </article>
+        <article class="card">
+          <div style="font-size:2rem;font-weight:800;color:var(--accent);">05</div>
+          <h4>Acompanhe</h4>
+          <p>Veja o dashboard com IMC, calorias da dieta atual e progresso das refeições.</p>
+        </article>
+      </div>
+      <div class="footer-note">Comandos: npm run dev (desenvolvimento) · npm run build (produção) · npm run preview.</div>
+    </section>
+
+    <!-- Slide 7: Destaques de código -->
+    <section class="slide" id="s7">
+      <div class="eyebrow">Destaques técnicos</div>
+      <h2>Recursos implementados</h2>
+      <div class="two-col">
+        <div style="text-align:left;">
+          <h3 style="text-align:left;">🔐 Autenticação & rotas</h3>
+          <p style="text-align:left; margin: 8px 0 16px 0;">AuthContext gerencia usuário/login; ProtectedRoute guarda as rotas; Layout resolve o título da página por rota.</p>
+          <h3 style="text-align:left;">💾 PWA & cache</h3>
+          <p style="text-align:left; margin: 8px 0 16px 0;">vite-plugin-pwa com registerType autoUpdate; useInstallPrompt e useOnlineStatus no Layout; banner de modo offline.</p>
+          <h3 style="text-align:left;">🎨 Tema</h3>
+          <p style="text-align:left; margin: 8px 0 16px 0;">ThemeProvider com localStorage, matchMedia system e meta theme-color ajustado dinamicamente.</p>
+        </div>
+        <div style="text-align:left; padding-top: 20px;">
+          <pre style="background:#0b100f;padding:16px;border-radius:12px;border:1px solid var(--border);overflow:auto;text-align:left;font-size:0.82rem;line-height:1.5;color:#e8edeb;">
+const pwa = VitePWA({
+  registerType: 'autoUpdate',
+  manifest: {
+    name: 'FitTrack — Treino & Nutrição',
+    display: 'standalone',
+    start_url: '/',
+    icons: [{ src: 'pwa-192x192.png', sizes: '192x192' },
+            { src: 'pwa-512x512.png', sizes: '512x512' }]
+  }
+});
+          </pre>
+        </div>
+      </div>
+      <div class="footer-note">Rotas: /inicio, /treinos, /treinos/:id, /dietas, /dietas/:id, /exercicios, /perfil, /usuarios.</div>
+    </section>
+
+    <!-- Slide 8: Roadmap -->
+    <section class="slide" id="s8">
+      <div class="eyebrow">Próximos passos</div>
+      <h2>Roadmap</h2>
+      <div class="grid grid-3">
+        <article class="card">
+          <div class="kicker">Curto prazo</div>
+          <h4>Exercícios catálogo</h4>
+          <p>Página de exercícios completa com cadastro, edição e catálogo global/pessoal.</p>
+        </article>
+        <article class="card orange">
+          <div class="kicker">Médio prazo</div>
+          <h4>Detalhes do treino</h4>
+          <p>WorkoutDetailPage com execução, timer, séries concluídas e histórico de desempenho.</p>
+        </article>
+        <article class="card blue">
+          <div class="kicker">Médio prazo</div>
+          <h4>Sincronização</h4>
+          <p>Sincronizar dados locais com API quando voltar a ficar online (background sync).</p>
+        </article>
+        <article class="card violet">
+          <div class="kicker">Longo prazo</div>
+          <h4>Notificações</h4>
+          <p>Push notifications para lembretes de treino e refeições via Push API.</p>
+        </article>
+      </div>
+      <a href="#" class="cta" onclick="return false;">Quero ver o código no GitHub</a>
+      <div class="footer-note">Projeto: /home/gabdev/DEV/fittrack-pwa · React + Vite + TypeScript + PWA</div>
+    </section>
+
+    <!-- Slide 9: Obrigado -->
+    <section class="slide" id="s9">
+      <div class="badge">Obrigado!</div>
+      <h1>FitTrack</h1>
+      <p class="lead">Treino e dieta, instaláveis em qualquer dispositivo. Obrigado pela atenção!</p>
+      <div style="display:flex;gap:14px;justify-content:center;margin-top:24px;">
+        <a href="#" class="cta-ghost" onclick="return false;">📦 Repositório</a>
+        <a href="#" class="cta-ghost" onclick="return false;">🚀 Demo ao vivo</a>
+      </div>
+      <div class="footer-note">PWA de treinos e dieta · Desenvolvido com React, Vite e TypeScript</div>
+    </section>
+  </div>
+
+  <div class="help">
+    Setas / Espaço · T = tema · ESC = sair
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide')
+    const total = slides.length
+    let index = 0
+
+    function update() {
+      slides.forEach((s, i) => {
+        s.className = 'slide'
+        if (i === index) s.classList.add('current')
+        else if (i < index) s.classList.add('prev')
+        else s.classList.add('next')
+      })
+      document.getElementById('counter').textContent = `${index + 1} / ${total}`
+      document.getElementById('progress').style.transform = `scaleX(${(index) / (total - 1)})`
+    }
+
+    function go(i) {
+      index = Math.max(0, Math.min(total - 1, i))
+      update()
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(index + 1) }
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(index - 1) }
+      if (e.key === 'Home') go(0)
+      if (e.key === 'End') go(total - 1)
+      if (e.key.toLowerCase() === 't') toggleTheme()
+    })
+
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme)
+    function toggleTheme() {
+      document.body.classList.toggle('light')
+    }
+
+    document.querySelectorAll('.btn-nav').forEach((b, i) => {
+      b.addEventListener('click', () => go(i === 0 ? index - 1 : index + 1))
+    })
+
+    update()
+  </script>
+</body>
+</html>

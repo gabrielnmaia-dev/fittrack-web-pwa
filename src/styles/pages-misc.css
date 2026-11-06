@@ -1,0 +1,90 @@
+/* -------------------------------------------------------------------------- */
+/* Not found                                                                  */
+/* -------------------------------------------------------------------------- */
+
+.not-found {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 2rem 1.25rem;
+  text-align: center;
+}
+
+.not-found-code {
+  font-size: clamp(4.5rem, 16vw, 9rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.07em;
+  color: transparent;
+  background: linear-gradient(160deg, var(--accent) 0%, var(--accent-strong) 55%, var(--lime) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: 0.9;
+}
+
+.not-found .empty-icon {
+  margin: -0.4rem 0 0.4rem;
+}
+
+.not-found h1 {
+  font-size: clamp(1.4rem, 3.6vw, 2rem);
+  letter-spacing: -0.04em;
+}
+
+.not-found > p {
+  max-width: 38ch;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Auth variations                                                            */
+/* -------------------------------------------------------------------------- */
+
+.auth-page-register .auth-showcase-copy h1 {
+  font-size: clamp(2.2rem, 4.4vw, 3.4rem);
+}
+
+.register-showcase {
+  justify-content: center;
+  gap: clamp(1.6rem, 4vw, 2.8rem);
+}
+
+.register-showcase .auth-brand {
+  margin-bottom: 0.4rem;
+}
+
+/* Dashboard wrapper -------------------------------------------------------- */
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  animation: fade-up 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Navigator fallback hook (single-page shell)                                */
+/* -------------------------------------------------------------------------- */
+
+@media (max-width: 420px) {
+  .not-found-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .not-found-actions .btn {
+    width: 100%;
+  }
+}

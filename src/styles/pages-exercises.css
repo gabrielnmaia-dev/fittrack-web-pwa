@@ -1,0 +1,126 @@
+/* -------------------------------------------------------------------------- */
+/* Exercise catalog                                                           */
+/* -------------------------------------------------------------------------- */
+
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 0.85rem;
+}
+
+.exercise-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.exercise-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.exercise-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.exercise-card-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border-radius: 13px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.exercise-card:nth-child(3n + 2) .exercise-card-icon {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.exercise-card:nth-child(3n + 3) .exercise-card-icon {
+  background: var(--orange-soft);
+  color: var(--orange-strong);
+}
+
+.exercise-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.exercise-card h3 {
+  margin-top: 0.15rem;
+  font-size: 0.98rem;
+  letter-spacing: -0.025em;
+}
+
+.exercise-card > p {
+  display: -webkit-box;
+  overflow: hidden;
+  min-height: 2.2em;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.exercise-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: auto;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border);
+}
+
+.exercise-prescription-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.22rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 9px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.exercise-prescription-pill strong {
+  color: var(--text);
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.exercise-prescription-pill i {
+  color: var(--faint);
+  font-style: normal;
+  padding: 0 0.1rem;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.card-actions .icon-btn {
+  width: 32px;
+  height: 32px;
+}
