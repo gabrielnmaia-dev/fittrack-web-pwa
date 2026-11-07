@@ -15,6 +15,12 @@ import type {
   WorkoutLevel,
   WorkoutPlan,
   WorkoutPlanInput,
+  TermsOfUse,
+  UserTermsAcceptanceStatus,
+  CookieConsent,
+  CookieConsentPreferences,
+  DataSubjectRequest,
+  UserDataExport,
 } from './types'
 
 function listQuery(params: ListParams = {}) {
@@ -207,5 +213,56 @@ export async function deleteMeal(id: number) {
 
 export async function getHealth() {
   const { data } = await api.get<{ status: string }>('/health/')
+  return data
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                Privacy / LGPD                              */
+/* -------------------------------------------------------------------------- */
+
+export async function getCurrentTerms() {
+  const { data } = await api.get<TermsOfUse>('/privacy/terms/current/')
+  return data
+}
+
+export async function getMyTermsAcceptance() {
+  const { data } = await api.get<UserTermsAcceptanceStatus>('/privacy/terms/my-acceptance/')
+  return data
+}
+
+export async function acceptTerms(payload?: { terms_version?: string; policy_version?: string }) {
+  const { data } = await api.post<{ message: string }>('/privacy/terms/accept/', payload || {})
+  return data
+}
+
+export async function getCookieConsent(sessionId?: string) {
+  const { data } = await api.get<CookieConsent>('/privacy/cookie-consent/', {
+    params: { session_id: sessionId },
+  })
+  return data
+}
+
+export async function saveCookieConsent(payload: CookieConsentPreferences) {
+  const { data } = await api.post<CookieConsent>('/privacy/cookie-consent/', payload)
+  return data
+}
+
+export async function exportUserData() {
+  const { data } = await api.get<UserDataExport>('/privacy/export-data/')
+  return data
+}
+
+export async function deleteAccount(reason?: string) {
+  const { data } = await api.post<{ message: string }>('/privacy/delete-account/', { reason })
+  return data
+}
+
+export async function getDataRequests() {
+  const { data } = await api.get<Paginated<DataSubjectRequest>>('/privacy/data-requests/')
+  return data
+}
+
+export async function createDataRequest(payload: { request_type: string; details?: string }) {
+  const { data } = await api.post<DataSubjectRequest>('/privacy/data-requests/', payload)
   return data
 }

@@ -1,0 +1,504 @@
+/* ==========================================================================
+   FitTrack — Estilos de Legalidade, Privacidade, Cookies e Termos (LGPD)
+   ========================================================================== */
+
+/* Páginas Legais (Públicas) */
+.legal-page {
+  min-height: 100vh;
+  background-color: var(--color-bg, #080b09);
+  color: var(--color-text, #e8ede9);
+  display: flex;
+  flex-direction: column;
+}
+
+.legal-header {
+  border-bottom: 1px solid var(--color-border, #1f2923);
+  background-color: var(--color-surface, #0f1511);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.legal-header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.legal-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.legal-container {
+  flex: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 2rem 1.25rem 4rem;
+}
+
+.legal-card {
+  background-color: var(--color-surface, #0f1511);
+  border: 1px solid var(--color-border, #1f2923);
+  border-radius: 1rem;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.legal-meta {
+  color: var(--color-text-muted, #85988d);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border, #1f2923);
+  padding-bottom: 1rem;
+}
+
+.legal-section {
+  margin-bottom: 2.25rem;
+}
+
+.legal-section h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text, #e8ede9);
+  margin-bottom: 0.75rem;
+}
+
+.legal-section p {
+  line-height: 1.65;
+  color: var(--color-text-subtle, #cbd5ce);
+  margin-bottom: 0.75rem;
+}
+
+.legal-list {
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-subtle, #cbd5ce);
+}
+
+.legal-list li {
+  margin-bottom: 0.5rem;
+}
+
+/* Tabelas Legais */
+.legal-table-wrapper {
+  overflow-x: auto;
+  margin: 1.25rem 0;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border, #1f2923);
+}
+
+.legal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.legal-table th {
+  background-color: var(--color-surface-elevated, #161e19);
+  padding: 0.75rem 1rem;
+  color: var(--color-text, #e8ede9);
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-border, #1f2923);
+}
+
+.legal-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border, #1f2923);
+  color: var(--color-text-subtle, #cbd5ce);
+  vertical-align: top;
+}
+
+.legal-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Caixas de destaque e aviso */
+.legal-highlight-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background-color: rgba(69, 174, 181, 0.08);
+  border: 1px solid rgba(69, 174, 181, 0.25);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+}
+
+.legal-warning-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background-color: rgba(229, 72, 93, 0.08);
+  border: 1px solid rgba(229, 72, 93, 0.3);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  color: var(--color-text, #e8ede9);
+}
+
+.legal-warning-box h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ff6b7e;
+  margin-bottom: 0.5rem;
+}
+
+.legal-warning-box p {
+  color: #f1cbd2;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 0.4rem;
+}
+
+/* Badges */
+.badge-necessary {
+  background-color: rgba(69, 174, 181, 0.15);
+  color: #55c7cf;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-optional {
+  background-color: rgba(133, 152, 141, 0.15);
+  color: #85988d;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.legal-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border, #1f2923);
+  text-align: center;
+}
+
+.legal-footer-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #85988d);
+}
+
+.legal-copyright {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted, #85988d);
+}
+
+/* ==========================================================================
+   Banner de Cookies (Flutuante / Modal Não-Bloqueante)
+   ========================================================================== */
+
+.cookie-banner-backdrop {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  max-width: 480px;
+  width: calc(100vw - 2.5rem);
+  z-index: 9999;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cookie-banner-card {
+  background-color: var(--color-surface-elevated, #131b15);
+  border: 1px solid var(--color-border-hover, #2d3b32);
+  border-radius: 1rem;
+  padding: 1.25rem 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.cookie-banner-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.cookie-icon-wrapper {
+  color: var(--color-primary, #45aeb5);
+  margin-top: 0.15rem;
+}
+
+.cookie-banner-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text, #e8ede9);
+}
+
+.cookie-banner-subtitle {
+  font-size: 0.8rem;
+  color: var(--color-text-muted, #85988d);
+  margin-top: 0.15rem;
+}
+
+.cookie-banner-body p {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--color-text-subtle, #cbd5ce);
+  margin-bottom: 0.5rem;
+}
+
+.cookie-banner-links {
+  font-size: 0.8rem;
+}
+
+.cookie-custom-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.cookie-category-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background-color: var(--color-surface, #0f1511);
+  border: 1px solid var(--color-border, #1f2923);
+  border-radius: 0.5rem;
+}
+
+.cookie-category-info {
+  flex: 1;
+}
+
+.cookie-category-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.cookie-category-info p {
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #85988d);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.cookie-toggle {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--color-primary, #45aeb5);
+  cursor: pointer;
+}
+
+.cookie-banner-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Modal de Aceite Obrigatório de Termos (Atualização)
+   ========================================================================== */
+
+.terms-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.terms-modal-card {
+  background-color: var(--color-surface, #0f1511);
+  border: 1px solid var(--color-border, #1f2923);
+  border-radius: 1rem;
+  max-width: 520px;
+  width: 100%;
+  padding: 1.75rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.terms-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.terms-modal-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.terms-modal-subtitle {
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #85988d);
+  margin-top: 0.15rem;
+}
+
+.terms-modal-body p {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text-subtle, #cbd5ce);
+  margin-bottom: 0.75rem;
+}
+
+.terms-modal-summary {
+  background-color: var(--color-surface-elevated, #161e19);
+  border: 1px solid var(--color-border, #1f2923);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+}
+
+.terms-modal-summary ul {
+  padding-left: 1rem;
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--color-text-subtle, #cbd5ce);
+}
+
+.terms-modal-summary li {
+  margin-bottom: 0.35rem;
+}
+
+.terms-modal-links {
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #85988d);
+}
+
+.terms-modal-actions {
+  margin-top: 1.25rem;
+}
+
+/* ==========================================================================
+   Elementos de Autenticação e Perfil
+   ========================================================================== */
+
+.auth-terms-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.825rem;
+  color: var(--color-text-subtle, #cbd5ce);
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.auth-terms-checkbox input {
+  margin-top: 0.15rem;
+  accent-color: var(--color-primary, #45aeb5);
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.auth-legal-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #85988d);
+  margin-top: 1rem;
+}
+
+.sidebar-legal-links {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #85988d);
+  padding: 0.4rem 0.5rem 0.2rem;
+}
+
+.sidebar-legal-links a {
+  color: var(--color-text-muted, #85988d);
+  transition: color 0.15s ease;
+}
+
+.sidebar-legal-links a:hover {
+  color: var(--color-text, #e8ede9);
+}
+
+/* Painel de Privacidade no Perfil */
+.privacy-profile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.25rem 0;
+}
+
+.privacy-status-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  background-color: var(--color-surface-elevated, #161e19);
+  border: 1px solid var(--color-border, #1f2923);
+  border-radius: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.privacy-status-info strong {
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 0.15rem;
+}
+
+.privacy-status-info p {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.privacy-links-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.privacy-actions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

@@ -23,6 +23,7 @@ export default function RegisterPage() {
   const [height, setHeight] = useState('')
   const [weight, setWeight] = useState('')
   const [goal, setGoal] = useState<Goal>('maintain_weight')
+  const [termsAccepted, setTermsAccepted] = useState(false)
 
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -40,6 +41,11 @@ export default function RegisterPage() {
 
     if (password !== confirm) {
       setError('As senhas não conferem.')
+      return
+    }
+
+    if (!termsAccepted) {
+      setError('Você precisa concordar com os Termos de Uso e a Política de Privacidade para criar sua conta.')
       return
     }
 
@@ -66,6 +72,7 @@ export default function RegisterPage() {
         password,
         first_name: firstName.trim() || undefined,
         last_name: lastName.trim() || undefined,
+        terms_accepted: true,
         profile,
       })
       navigate('/inicio', { replace: true })
@@ -344,6 +351,26 @@ export default function RegisterPage() {
                 {error}
               </p>
             )}
+
+            <label className="auth-terms-checkbox">
+              <input
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                required
+              />
+              <span>
+                Li e concordo com os{' '}
+                <Link to="/termos" target="_blank" rel="noopener noreferrer">
+                  Termos de Uso
+                </Link>{' '}
+                e a{' '}
+                <Link to="/privacidade" target="_blank" rel="noopener noreferrer">
+                  Política de Privacidade
+                </Link>
+                .
+              </span>
+            </label>
 
             <button className="btn btn-primary btn-lg btn-block" type="submit" disabled={loading}>
               {loading ? (

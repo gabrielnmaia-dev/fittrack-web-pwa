@@ -4,6 +4,7 @@ import { useAuth } from '../auth/AuthContext'
 import { useInstallPrompt, useOnlineStatus } from '../hooks/usePwa'
 import { displayName, goalLabel, initials } from '../lib/format'
 import { ThemeToggle } from './ThemeToggle'
+import TermsAcceptanceModal from './TermsAcceptanceModal'
 import Icon, { type IconName } from './ui/Icon'
 import { useToast } from './ui/Toast'
 
@@ -35,6 +36,9 @@ function resolvePageTitle(pathname: string): string {
   if (pathname.startsWith('/exercicios')) return 'Exercícios — FitTrack'
   if (pathname.startsWith('/perfil')) return 'Meu perfil — FitTrack'
   if (pathname.startsWith('/usuarios')) return 'Usuários — FitTrack'
+  if (pathname === '/privacidade') return 'Política de Privacidade — FitTrack'
+  if (pathname === '/cookies') return 'Política de Cookies — FitTrack'
+  if (pathname === '/termos') return 'Termos de Uso — FitTrack'
   return 'FitTrack — Treino & Nutrição'
 }
 
@@ -69,6 +73,7 @@ export default function Layout() {
 
   return (
     <div className="app-shell">
+      <TermsAcceptanceModal />
       <a href="#conteudo-principal" className="skip-link">
         Pular para o conteúdo principal
       </a>
@@ -120,6 +125,14 @@ export default function Layout() {
           <div className="sidebar-theme">
             <span>Aparência</span>
             <ThemeToggle />
+          </div>
+
+          <div className="sidebar-legal-links">
+            <NavLink to="/termos">Termos</NavLink>
+            <span>·</span>
+            <NavLink to="/privacidade">Privacidade</NavLink>
+            <span>·</span>
+            <NavLink to="/cookies">Cookies</NavLink>
           </div>
 
           {user && (

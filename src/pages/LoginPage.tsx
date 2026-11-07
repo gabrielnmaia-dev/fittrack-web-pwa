@@ -195,6 +195,14 @@ export default function LoginPage() {
             <Icon name="info" size={14} />
             Use o usuário e a senha cadastrados no FitTrack.
           </p>
+
+          <footer className="auth-legal-links">
+            <Link to="/termos">Termos de Uso</Link>
+            <span>·</span>
+            <Link to="/privacidade">Privacidade</Link>
+            <span>·</span>
+            <Link to="/cookies">Cookies</Link>
+          </footer>
         </div>
       </section>
     </div>

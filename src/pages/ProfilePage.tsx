@@ -1,8 +1,9 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { updateMe } from '../api/endpoints'
-import type { Goal, UpdateMeInput } from '../api/types'
+import { deleteAccount, exportUserData, getMyTermsAcceptance, updateMe } from '../api/endpoints'
+import type { Goal, UpdateMeInput, UserTermsAcceptanceStatus } from '../api/types'
 import { useAuth } from '../auth/AuthContext'
+import ConfirmDialog from '../components/ui/ConfirmDialog'
 import Icon from '../components/ui/Icon'
 import PageHeader from '../components/ui/PageHeader'
 import { useToast } from '../components/ui/Toast'
@@ -51,6 +52,65 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [savingPassword, setSavingPassword] = useState(false)
   const [error, setError] = useState('')
+
+  // LGPD e Privacidade
+  const [termsStatus, setTermsStatus] = useState<UserTermsAcceptanceStatus | null>(null)
+  const [exporting, setExporting] = useState(false)
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
+  const [deletingAccount, setDeletingAccount] = useState(false)
+
+  useEffect(() => {
+    let active = true
+    getMyTermsAcceptance()
+      .then((status) => {
+        if (active) setTermsStatus(status)
+      })
+      .catch(() => {})
+    return () => {
+      active = false
+    }
+  }, [])
+
+  async function handleExportData() {
+    setExporting(true)
+    try {
+      const data = await exportUserData()
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: 'application/json;charset=utf-8',
+      })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `fittrack_dados_${user?.username || 'usuario'}_${new Date().toISOString().slice(0, 10)}.json`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      toast('Relatório exportado em formato JSON.', 'success')
+    } catch (err) {
+      toast(apiErrorMessage(err, 'Não foi possível exportar seus dados.'), 'error')
+    } finally {
+      setExporting(false)
+    }
+  }
+
+  async function handleConfirmDelete() {
+    setDeletingAccount(true)
+    try {
+      await deleteAccount('Encerramento e exclusão solicitados pelo titular.')
+      toast('Sua conta foi desativada e anonimizada com sucesso.', 'info')
+      logout()
+      navigate('/login', { replace: true })
+    } catch (err) {
+      toast(apiErrorMessage(err, 'Erro ao solicitar exclusão de conta.'), 'error')
+      setDeletingAccount(false)
+      setConfirmDeleteOpen(false)
+    }
+  }
+
+  function handleOpenCookieSettings() {
+    window.dispatchEvent(new CustomEvent('fittrack:open-cookie-banner'))
+  }
 
   if (!user) return null
 
@@ -434,6 +494,93 @@ export default function ProfilePage() {
         <section className="panel">
           <header className="panel-header">
             <div>
+              <h2>Privacidade e Proteção de Dados (LGPD)</h2>
+              <p>Gerencie seus dados pessoais, termos aceitos e direitos de titular.</p>
+            </div>
+            <span className="panel-icon">
+              <Icon name="shield" size={19} />
+            </span>
+          </header>
+
+          <div className="privacy-profile-body">
+            <div className="privacy-status-card">
+              <div className="privacy-status-info">
+                <strong>Termos de Uso e Política de Privacidade</strong>
+                <p>
+                  {termsStatus?.has_accepted_current ? (
+                    <span className="text-success">
+                      ✓ Aceite registrado na versão <strong>v{termsStatus.current_version}</strong>
+                      {termsStatus.latest_acceptance?.accepted_at && (
+                        <> em {formatDate(termsStatus.latest_acceptance.accepted_at)}</>
+                      )}
+                    </span>
+                  ) : (
+                    <span className="text-warning">
+                      Aguardando confirmação da versão v{termsStatus?.current_version || '1.0'}
+                    </span>
+                  )}
+                </p>
+              </div>
+              <div className="privacy-links-inline">
+                <Link to="/termos" className="btn btn-ghost btn-xs">Termos</Link>
+                <Link to="/privacidade" className="btn btn-ghost btn-xs">Privacidade</Link>
+                <Link to="/cookies" className="btn btn-ghost btn-xs">Cookies</Link>
+              </div>
+            </div>
+
+            <div className="privacy-actions-grid">
+              <button
+                type="button"
+                className="settings-link"
+                onClick={handleExportData}
+                disabled={exporting}
+              >
+                <span className="settings-link-icon">
+                  <Icon name="download" size={18} />
+                </span>
+                <span>
+                  <strong>Exportar Meus Dados (Portabilidade)</strong>
+                  <small>Baixar relatório JSON com todos os seus dados cadastrais, treinos e dietas</small>
+                </span>
+                {exporting ? <span className="spinner spinner-sm" /> : <Icon name="chevronRight" size={17} />}
+              </button>
+
+              <button
+                type="button"
+                className="settings-link"
+                onClick={handleOpenCookieSettings}
+              >
+                <span className="settings-link-icon">
+                  <Icon name="filter" size={18} />
+                </span>
+                <span>
+                  <strong>Preferências de Cookies e Armazenamento</strong>
+                  <small>Personalize escolhas de armazenamento local e tecnologias opcionais</small>
+                </span>
+                <Icon name="chevronRight" size={17} />
+              </button>
+
+              <button
+                type="button"
+                className="settings-link danger"
+                onClick={() => setConfirmDeleteOpen(true)}
+              >
+                <span className="settings-link-icon">
+                  <Icon name="trash" size={18} />
+                </span>
+                <span>
+                  <strong>Excluir Minha Conta e Dados</strong>
+                  <small>Desativação permanente e anonimização dos seus dados pessoais</small>
+                </span>
+                <Icon name="chevronRight" size={17} />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section className="panel">
+          <header className="panel-header">
+            <div>
               <h2>Aparência</h2>
               <p>Modo atual: {mode === 'system' ? 'sistema' : mode === 'dark' ? 'escuro' : 'claro'}</p>
             </div>
@@ -471,6 +618,16 @@ export default function ProfilePage() {
             <Icon name="chevronRight" size={17} />
           </button>
         </section>
+
+        <ConfirmDialog
+          open={confirmDeleteOpen}
+          onClose={() => setConfirmDeleteOpen(false)}
+          onConfirm={handleConfirmDelete}
+          title="Excluir Conta e Dados Pessoais"
+          description="Tem certeza que deseja solicitar o encerramento da sua conta? Seus dados cadastrais e perfil físico serão desativados e anonimizados. Em cumprimento ao Marco Civil da Internet (Art. 15), logs de conexão serão mantidos sob sigilo judicial pelo prazo legal de 6 meses."
+          confirmLabel="Excluir Minha Conta"
+          loading={deletingAccount}
+        />
       </div>
     </div>
   )

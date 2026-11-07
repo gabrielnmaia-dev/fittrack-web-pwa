@@ -45,6 +45,7 @@ export interface RegisterInput {
   password: string
   first_name?: string
   last_name?: string
+  terms_accepted?: boolean
   profile?: ProfileInput
 }
 
@@ -140,4 +141,124 @@ export interface ListParams {
   pageSize?: number
   search?: string
   ordering?: string
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                Privacy / LGPD                              */
+/* -------------------------------------------------------------------------- */
+
+export interface TermsOfUse {
+  id: number
+  version: string
+  title: string
+  summary: string
+  content_terms: string
+  content_privacy: string
+  effective_date: string
+  created_at: string
+}
+
+export interface UserTermsAcceptanceStatus {
+  current_version: string
+  has_accepted_current: boolean
+  needs_acceptance: boolean
+  latest_acceptance?: {
+    terms_version: string
+    policy_version: string
+    accepted_at: string
+  } | null
+}
+
+export interface CookieConsentPreferences {
+  necessary: boolean
+  preferences: boolean
+  analytics: boolean
+  marketing: boolean
+  version?: string
+  session_id?: string
+}
+
+export interface CookieConsent extends CookieConsentPreferences {
+  id?: number
+  created_at?: string
+  updated_at?: string
+  is_default?: boolean
+}
+
+export type DataRequestType =
+  | 'access'
+  | 'export'
+  | 'rectification'
+  | 'deletion'
+  | 'information'
+  | 'revocation'
+
+export interface DataSubjectRequest {
+  id: number
+  request_type: DataRequestType
+  request_type_display: string
+  status: 'pending' | 'processing' | 'completed' | 'rejected'
+  status_display: string
+  details: string
+  response_notes: string
+  created_at: string
+  resolved_at: string | null
+}
+
+export interface UserDataExport {
+  plataforma: string
+  exportado_em: string
+  declaracao_lgpd: string
+  titular: {
+    id: number
+    username: string
+    email: string
+    first_name: string
+    last_name: string
+    date_joined: string
+    is_active: boolean
+    perfil_fisico: {
+      age: number
+      height_cm: number
+      weight_kg: number
+      goal: Goal
+      goal_display: string
+    } | null
+  }
+  treinos: Array<{
+    id: number
+    name: string
+    level: WorkoutLevel
+    description: string
+    duration: number
+    created_at: string
+  }>
+  planos_alimentares: Array<{
+    id: number
+    name: string
+    description: string
+    calories: number
+    created_at: string
+    meals: Array<{
+      id: number
+      name: string
+      description: string
+      calories: number
+      created_at: string
+    }>
+  }>
+  historico_aceites_termos: Array<{
+    terms_version: string
+    policy_version: string
+    accepted_at: string
+  }>
+  solicitacoes_titular: Array<{
+    id: number
+    type: string
+    type_display: string
+    status: string
+    status_display: string
+    details: string
+    created_at: string
+  }>
 }
